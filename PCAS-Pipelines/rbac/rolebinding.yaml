@@ -2,7 +2,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: pcas-role-binding
-  namespace: pcas
+  namespace: pcas-ci
 subjects:
   - kind: ServiceAccount
     name: pcas-sa
