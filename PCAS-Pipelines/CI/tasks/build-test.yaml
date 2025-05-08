@@ -2,36 +2,36 @@ apiVersion: tekton.dev/v1
 kind: Task
 metadata:
   name: build-test
-  namespace: pcas
+  namespace: pcas-ci
 spec:
   workspaces:
-    - name: source
+    - name: source-ci
 
   steps:
     - name: build
       image: maven:3.9.6-eclipse-temurin-17
-      workingDir: $(workspaces.source.path)/src
+      workingDir: $(workspaces.source-ci.path)/src
       env:
         - name: MAVEN_CONFIG
-          value: $(workspaces.source.path)/.m2
+          value: $(workspaces.source-ci.path)/.m2
       script: |
         #!/bin/sh
         echo "Build task Started"
         echo "$(pwd) : Current Working Directory"
-        mvn -Dmaven.repo.local=$(workspaces.source.path)/.m2 clean install -DskipTests
+        mvn -Dmaven.repo.local=$(workspaces.source-ci.path)/.m2 clean install -DskipTests
         echo "Dependency Installation Success"
         echo "$(pwd) : Current Working Directory"
 
     - name: test
       image: maven:3.9.6-eclipse-temurin-17
-      workingDir: $(workspaces.source.path)/src
+      workingDir: $(workspaces.source-ci.path)/src
       env:
         - name: MAVEN_CONFIG
-          value: $(workspaces.source.path)/.m2
+          value: $(workspaces.source-ci.path)/.m2
       script: |
         #!/bin/sh
         echo "Test And Code Coverage Running"
         echo "$(pwd) : Current Working Directory"
-        mvn -Dmaven.repo.local=$(workspaces.source.path)/.m2 test verify
+        mvn -Dmaven.repo.local=$(workspaces.source-ci.path)/.m2 test verify
         echo "Test And Code Coverage Done"
         echo "$(pwd) : Current Working Directory"

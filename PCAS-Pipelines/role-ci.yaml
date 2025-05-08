@@ -2,7 +2,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: role-pcas
-  namespace: pcas
+  namespace: pcas-ci
 rules:
   - apiGroups: [""]
     resources: [ "pods","services","configmaps","secrets" ]

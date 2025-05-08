@@ -1,8 +1,8 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: pcas-pr-1
-  namespace: pcas
+  name: pcas-pr
+  namespace: pcas-ci
 spec:
   pipelineRef:
     name: pcas-pipeline
@@ -11,7 +11,15 @@ spec:
       value: "https://github.com/GhatgeRitesh/Product-Catalog-API-Service-CI-CD"
     - name: revision
       value: "main"
+    - name: SONAR_PROJECT_KEY
+      value: "PCAS_SonarQube"
+    - name: SONAR_ORGANIZATION
+      value: "ghatgeritesh"
+    - name: SONAR_TOKEN_SECRET_NAME
+      value: sonarcloud-token
+    - name: SONAR_HOST_URL
+      value: "https://sonarcloud.io"
   workspaces:
-    - name: source
+    - name: source-ci
       PersistentVolumeClaim:
-        claimName: source
+        claimName: source-ci

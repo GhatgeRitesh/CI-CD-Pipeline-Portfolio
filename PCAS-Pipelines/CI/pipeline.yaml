@@ -2,21 +2,25 @@ apiVersion: tekton.dev/v1
 kind: Pipeline
 metadata:
   name: pcas-pipeline
-  namespace: pcas
+  namespace: pcas-ci
 spec:
   workspaces:
-    - name: source
+    - name: source-ci
   params:
     - name: url
     - name: revision
+    - name: SONAR_TOKEN_SECRET_NAME
+    - name: SONAR_PROJECT_KEY
+    - name: SONAR_ORGANIZATION
+    - name: SONAR_HOST_URL
 
   tasks:
     - name: cleanup
       taskRef:
         name: clean-workspace
       workspaces:
-        - name: source
-          workspace: source
+        - name: source-ci
+          workspace: source-ci
 
     - name: clone
       taskRef:
@@ -27,14 +31,31 @@ spec:
         - name: revision
           value: "$(params.revision)"
       workspaces:
-        - name: source
-          workspace: source
+        - name: source-ci
+          workspace: source-ci
       runAfter: ["cleanup"]
 
     - name: build-test
       taskRef:
         name: build-test
       workspaces:
-        - name: source
-          workspace: source
+        - name: source-ci
+          workspace: source-ci
       runAfter: ["clone"]
+
+    - name: sonar-cloud
+      taskRef:
+        name: sonar-analysis
+      workspaces:
+        - name: source-ci
+          workspace: source-ci
+      params:
+        - name: SONAR_TOKEN_SECRET_NAME
+          value: "$(params.SONAR_TOKEN_SECRET_NAME)"
+        - name: SONAR_PROJECT_KEY
+          value: "$(params.SONAR_PROJECT_KEY)"
+        - name: SONAR_ORGANIZATION
+          value: "$(params.SONAR_ORGANIZATION)"
+        - name: SONAR_HOST_URL
+          value: "$(params.SONAR_HOST_URL)"
+      runAfter: ["build-test"]
