@@ -11,16 +11,25 @@ spec:
     - name: revision
   
   tasks:
+    - name: cleanup
+      taskRef:
+        name: cleanup
+      workspaces:
+        - name: source-cd
+          workspace: source-cd
+
     - name: clone
       taskRef:
         name: clone
       workspaces:
          - name: source-cd
+      runAfter: ["cleanup"]
       params:
          - name: url
            value: "$(params.url)"
          - name: revision
            value: "$(params.revision)"
+
     - name: apply-k8s-manifest
       taskRef:
         name: apply-k8s-manifest
