@@ -35,6 +35,6 @@ spec:
           -Dsonar.projectKey=$(params.SONAR_PROJECT_KEY) \
           -Dsonar.organization=$(params.SONAR_ORGANIZATION) \
           -Dsonar.host.url=$(params.SONAR_HOST_URL) \
-          -Dsonar.login=$SONAR_TOKEN
+          -Dsonar.token=$SONAR_TOKEN
         echo "Sonar cloud Analysis Done"
       

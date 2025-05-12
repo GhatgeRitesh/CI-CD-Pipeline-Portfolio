@@ -1,0 +1,22 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: test
+  namespace: pcas-ci
+spec:
+  workspaces:
+    - name: source-ci
+  steps:
+    - name: test
+      image: maven:3.9.6-eclipse-temurin-17
+      workingDir: $(workspaces.source-ci.path)/src
+      env:
+        - name: MAVEN_CONFIG
+          value: $(workspaces.source-ci.path)/.m2
+      script: |
+        #!/bin/sh
+        echo "Test And Code Coverage Running"
+        echo "$(pwd) : Current Working Directory"
+        mvn -Dmaven.repo.local=$(workspaces.source-ci.path)/.m2 test verify
+        echo "Test And Code Coverage Done"
+        echo "$(pwd) : Current Working Directory"

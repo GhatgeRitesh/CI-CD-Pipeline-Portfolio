@@ -1,0 +1,16 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: ci-eventlistener
+  namespace: pcas-ci
+spec:
+  serviceAccountName: pcas-sa-ci
+  resources:
+    kubernetesResource:
+      serviceType: ClusterIP
+  triggers:
+    - name: ci-trigger
+      bindings:
+        - ref: ci-triggerbinding
+      template:
+        ref: ci-trigger-template

@@ -13,6 +13,7 @@ spec:
     - name: SONAR_PROJECT_KEY
     - name: SONAR_ORGANIZATION
     - name: SONAR_HOST_URL
+    - name: IMAGE
 
   tasks:
     - name: cleanup
@@ -35,13 +36,21 @@ spec:
           workspace: source-ci
       runAfter: ["cleanup"]
 
-    - name: build-test
+    - name: build
       taskRef:
-        name: build-test
+        name: build
       workspaces:
         - name: source-ci
           workspace: source-ci
       runAfter: ["clone"]
+
+    - name: unit-test
+      taskRef:
+        name: test
+      workspaces:
+        - name: source-ci
+          workspace: source-ci
+      runAfter: ["build"]
 
     - name: sonar-cloud
       taskRef:
@@ -58,4 +67,16 @@ spec:
           value: "$(params.SONAR_ORGANIZATION)"
         - name: SONAR_HOST_URL
           value: "$(params.SONAR_HOST_URL)"
-      runAfter: ["build-test"]
+      runAfter: ["unit-test"]
+    
+    - name: docker-build-push
+      taskRef:
+        name: docker-image
+      workspaces:
+        - name: source-ci
+          workspace: source-ci
+      params:
+        - name: IMAGE
+          value: "$(params.IMAGE)"
+      runAfter: ["sonar-cloud"]
+

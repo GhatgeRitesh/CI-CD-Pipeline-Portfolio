@@ -1,0 +1,34 @@
+
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: docker-image
+  namespace: pcas-ci
+spec:
+  
+  workspaces:
+    - name: source-ci
+  
+  params:
+    - name: IMAGE
+      description: Full image with tag (e.g. , docker.io/username/app:Tag)
+  
+  steps:
+    - name: docker-build-push
+      image: docker:24.0.5-cli
+      workingDir: $(workspaces.source-ci.path)/src
+      script: |
+       #!/bin/sh
+       echo "Building Docker Image : $(params.IMAGE)"
+       docker build -t $(params.IMAGE) .
+       echo "Pushing Docker Image To DockerHub"
+       docker push $(params.IMAGE) 
+       echo "Image pushed Successfully"
+
+      volumeMounts:
+        - name: docker-socket
+          mountPath: /var/run/docker.sock
+  volumes:
+    - name: docker-socket
+      hostPath:
+        path: /var/run/docker.sock

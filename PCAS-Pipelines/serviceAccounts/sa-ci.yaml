@@ -3,3 +3,5 @@ kind: ServiceAccount
 metadata:
   name: pcas-sa-ci
   namespace: pcas-ci
+secrets:
+  - name: docker-creds 

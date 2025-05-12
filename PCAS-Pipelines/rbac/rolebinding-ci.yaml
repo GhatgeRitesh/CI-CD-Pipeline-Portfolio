@@ -1,13 +1,72 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pcas-role-binding
+  name: triggers-permissions
   namespace: pcas-ci
 subjects:
   - kind: ServiceAccount
     name: pcas-sa-ci
     namespace: pcas-ci
 roleRef:
-  kind: Role
-  name: pcas-role-ci
+  kind: ClusterRole
+  name: tekton-triggers-eventlistener-roles
   apiGroup: rbac.authorization.k8s.io
+
+
+#  PS D:\Portfolio-CI-CD\PCAS-Pipelines\Triggers\CI> kubectl get el
+#  NAME               ADDRESS                                                     AVAILABLE   REASON
+#  READY   REASON
+#  ci-eventlistener   http://el-ci-eventlistener.pcas-ci.svc.cluster.local:8080   False       MinimumReplicasUnavailable   False
+#  PS D:\Portfolio-CI-CD\PCAS-Pipelines\Triggers\CI>
+#  PS C:\Users\Ritesh> kubectl get pods --watch
+#  NAME                                   READY   STATUS    RESTARTS     AGE
+#  el-ci-eventlistener-568878567b-72sb8   0/1     Running   3 (2s ago)   32s
+#  el-ci-eventlistener-568878567b-72sb8   0/1     CrashLoopBackOff   3 (1s ago)   41s
+#  PS C:\Users\Ritesh> kubectl logs pod el-ci-eventlistener-568878567b-72sb8
+#  Error from server (NotFound): pods "pod" not found
+#  PS C:\Users\Ritesh> kubectl logs pods el-ci-eventlistener-568878567b-72sb8
+#  Error from server (NotFound): pods "pods" not found
+#  PS C:\Users\Ritesh> kubectl logs  el-ci-eventlistener-568878567b-72sb8
+#  W0510 13:38:19.401407       1 reflector.go:424] k8s.io/client-go@v0.25.9/tools/cache/reflector.go:169:
+#    failed to list *v1alpha1.ClusterInterceptor:
+#      clusterinterceptors.triggers.tekton.dev is forbidden: User "system:serviceaccount:pcas-ci:pcas-sa-ci" cannot list resource "clusterinterceptors" in API group "triggers.tekton.dev" at the cluster scope
+#  E0510 13:38:19.401590       1 reflector.go:140] k8s.io/client-go@v0.25.9/tools/cache/reflector.go:169:
+#    Failed to watch *v1alpha1.ClusterInterceptor:
+#      failed to list *v1alpha1.ClusterInterceptor:
+#        clusterinterceptors.triggers.tekton.dev is forbidden: User "system:serviceaccount:pcas-ci:pcas-sa-ci" cannot list resource "clusterinterceptors" in API group "triggers.tekton.dev" at the cluster scope
+#  W0510 13:38:19.401708       1 reflector.go:424] k8s.io/client-go@v0.25.9/tools/cache/reflector.go:169:
+#    failed to list *v1beta1.ClusterTriggerBinding:
+#      clustertriggerbindings.triggers.tekton.dev is forbidden: User "system:serviceaccount:pcas-ci:pcas-sa-ci" cannot list resource "clustertriggerbindings" in API group "triggers.tekton.dev" at the cluster scope
+#  E0510 13:38:19.401724       1 reflector.go:140] k8s.io/client-go@v0.25.9/tools/cache/reflector.go:169:
+#    Failed to watch *v1beta1.ClusterTriggerBinding:
+#      failed to list *v1beta1.ClusterTriggerBinding:
+#        clustertriggerbindings.triggers.tekton.dev is forbidden: User "system:serviceaccount:pcas-ci:pcas-sa-ci" cannot list resource "clustertriggerbindings" in API group "triggers.tekton.dev" at the cluster scope
+#  W0510 13:38:20.548431       1 reflector.go:424] k8s.io/client-go@v0.25.9/tools/cache/reflector.go:169:
+#    failed to list *v1beta1.ClusterTriggerBinding:
+#      clustertriggerbindings.triggers.tekton.dev is forbidden: User "system:serviceaccount:pcas-ci:pcas-sa-ci" cannot list resource "clustertriggerbindings" in API group "triggers.tekton.dev" at the cluster scope
+#  E0510 13:38:20.548533       1 reflector.go:140] k8s.io/client-go@v0.25.9/tools/cache/reflector.go:169:
+#    Failed to watch *v1beta1.ClusterTriggerBinding:
+#      failed to list *v1beta1.ClusterTriggerBinding:
+#        clustertriggerbindings.triggers.tekton.dev is forbidden: User "system:serviceaccount:pcas-ci:pcas-sa-ci" cannot list resource "clustertriggerbindings" in API group "triggers.tekton.dev" at the cluster scope
+#  W0510 13:38:20.735831       1 reflector.go:424] k8s.io/client-go@v0.25.9/tools/cache/reflector.go:169:
+#    failed to list *v1alpha1.ClusterInterceptor:
+#      clusterinterceptors.triggers.tekton.dev is forbidden: User "system:serviceaccount:pcas-ci:pcas-sa-ci" cannot list resource "clusterinterceptors" in API group "triggers.tekton.dev" at the cluster scope
+#  E0510 13:38:20.735924       1 reflector.go:140] k8s.io/client-go@v0.25.9/tools/cache/reflector.go:169:
+#    Failed to watch *v1alpha1.ClusterInterceptor:
+#      failed to list *v1alpha1.ClusterInterceptor:
+#        clusterinterceptors.triggers.tekton.dev is forbidden: User "system:serviceaccount:pcas-ci:pcas-sa-ci" cannot list resource "clusterinterceptors" in API group "triggers.tekton.dev" at the cluster scope
+#  W0510 13:38:22.402176       1 reflector.go:424] k8s.io/client-go@v0.25.9/tools/cache/reflector.go:169:
+#    failed to list *v1beta1.ClusterTriggerBinding:
+#      clustertriggerbindings.triggers.tekton.dev is forbidden: User "system:serviceaccount:pcas-ci:pcas-sa-ci" cannot list resource "clustertriggerbindings" in API group "triggers.tekton.dev" at the cluster scope
+#  E0510 13:38:22.402273       1 reflector.go:140] k8s.io/client-go@v0.25.9/tools/cache/reflector.go:169:
+#    Failed to watch *v1beta1.ClusterTriggerBinding:
+#      failed to list *v1beta1.ClusterTriggerBinding:
+#        clustertriggerbindings.triggers.tekton.dev is forbidden: User "system:serviceaccount:pcas-ci:pcas-sa-ci" cannot list resource "clustertriggerbindings" in API group "triggers.tekton.dev" at the cluster scope
+#  W0510 13:38:22.494104       1 reflector.go:424] k8s.io/client-go@v0.25.9/tools/cache/reflector.go:169:
+#    failed to list *v1alpha1.ClusterInterceptor:
+#      clusterinterceptors.triggers.tekton.dev is forbidden: User "system:serviceaccount:pcas-ci:pcas-sa-ci" cannot list resource "clusterinterceptors" in API group "triggers.tekton.dev" at the cluster scope
+#  E0510 13:38:22.494211       1 reflector.go:140] k8s.io/client-go@v0.25.9/tools/cache/reflector.go:169:
+#    Failed to watch *v1alpha1.ClusterInterceptor:
+#      failed to list *v1alpha1.ClusterInterceptor:
+#        clusterinterceptors.triggers.tekton.dev is forbidden: User "system:serviceaccount:pcas-ci:pcas-sa-ci" cannot list resource "clusterinterceptors" in API group "triggers.tekton.dev" at the cluster scope
+#  2025/05/10 13:38:24 failed to start informers:failed to wait for cache at index 0 to sync

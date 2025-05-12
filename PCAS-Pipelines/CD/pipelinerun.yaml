@@ -1,0 +1,19 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: pcas-cd-pr
+  namespace: pcas-cd
+spec:
+   serviceAccountName: pcas-sa-cd
+   pipelineRef:
+      name: pcas-cd-pipeline
+   params:
+     - name: url
+       value: "https://github.com/GhatgeRitesh/CI-CD-Pipeline-Portfolio.git"
+     - name: revision
+       value: "main"
+   workspaces:
+     - name: source-cd
+       persistentVolumeClaim:
+         claimName: source-cd
+ 

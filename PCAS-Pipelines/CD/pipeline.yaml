@@ -1,0 +1,30 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: pcas-cd-pipeline
+  namespace: pcas-cd
+spec:
+  workspaces:
+    - name: source-cd
+  params:
+    - name: url
+    - name: revision
+  
+  tasks:
+    - name: clone
+      taskRef:
+        name: clone
+      workspaces:
+         - name: source-cd
+      params:
+         - name: url
+           value: "$(params.url)"
+         - name: revision
+           value: "$(params.revision)"
+    - name: apply-k8s-manifest
+      taskRef:
+        name: apply-k8s-manifest
+      workspaces:
+        - name: source-cd
+          workspace: source-cd
+      runAfter: ["clone"]

@@ -1,0 +1,21 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: clone
+  namespace: pcas-cd
+spec:
+  workspaces:
+    - name: source-cd
+  params:
+    - name: url
+    - name: revision
+
+  steps:
+    - name: clone
+      image: bitnami/git
+      workingDir: $(workspaces.source-cd.path)/src
+      script: |
+        #!/bin/sh
+        echo "cloning Repo"
+        git clone -b "$(params.revision)" "$(params.url)" .
+        echo "cloned Successful"

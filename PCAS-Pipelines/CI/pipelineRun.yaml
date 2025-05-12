@@ -1,9 +1,10 @@
-apiVersion: tekton.dev/v1
+apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
   name: pcas-pr
   namespace: pcas-ci
 spec:
+  serviceAccountName: pcas-sa-ci
   pipelineRef:
     name: pcas-pipeline
   params:
@@ -19,6 +20,8 @@ spec:
       value: sonarcloud-token
     - name: SONAR_HOST_URL
       value: "https://sonarcloud.io"
+    - name: IMAGE
+      value: "docker.io/riteshghatge5657/pcas-cicd:0.2"
   workspaces:
     - name: source-ci
       PersistentVolumeClaim:

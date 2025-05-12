@@ -1,0 +1,11 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: ci-triggerbinding
+  namespace: pcas-ci
+spec:
+  params:
+    - name: url
+      value: $(body.repository.clone_url)
+    - name: revision
+      value: $(body.head_commit.id)

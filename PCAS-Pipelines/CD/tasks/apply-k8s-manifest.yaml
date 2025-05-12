@@ -1,0 +1,23 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: apply-k8s-manifest
+  namespace: pcas-cd
+spec:
+  workspaces:
+    - name: source-cd
+  steps:
+    - name: apply-manifest
+      image: bitnami/kubectl:latest
+      workingDir: $(workspaces.source-cd.path)/src
+      script: |
+        #!/bin/sh
+        path="./PCAS-Pipelines/CD/k8s"
+        echo "Path Provided $path"
+        echo "Current Working Directory : $(pwd)" 
+        for file in $path/*.yaml; do
+          echo "Applying: $file"
+          kubectl apply -f "$file"
+        done
+
+        echo "Manifest applied successfully."
