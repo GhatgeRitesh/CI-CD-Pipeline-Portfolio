@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: pcas-cd-rolebinding
+  namespace: pcas-cd
+subjects:
+  - kind: ServiceAccount
+    name: pcas-sa-cd
+    namespace: pcas-cd
+roleRef:
+  kind: Role
+  name: pcas-cd-role
+  apiGroup: rbac.authorization.k8s.io
