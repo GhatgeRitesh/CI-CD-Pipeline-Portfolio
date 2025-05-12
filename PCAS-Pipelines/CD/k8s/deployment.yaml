@@ -15,7 +15,7 @@ spec:
    spec:
      containers:
       - name: pcas
-        image: riteshghatge5657/pcas-cicd:0.2 
+        image: riteshghatge5657/pcas-cicd:0.1
         ports:
          - containerPort: 8090
  
