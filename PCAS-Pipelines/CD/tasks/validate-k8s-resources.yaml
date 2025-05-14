@@ -18,7 +18,7 @@ spec:
       script: |
         #!/bin/sh
         echo "Validating service: $(params.service-name)"
-        if ! kubectl get svc: $(params.service-name) -n $(params.namespace); then
+        if ! kubectl get svc $(params.service-name) -n $(params.namespace); then
           echo "Service not found !!! "
           exit 1
         fi

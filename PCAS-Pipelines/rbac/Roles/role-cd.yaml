@@ -10,3 +10,6 @@ rules:
   - apiGroups: [""]
     resources: ["services"]
     verbs: ["get", "list", "watch", "create", "update", "patch"]
+  - apiGroups: [ "" ]  # Core API group for pods
+    resources: [ "pods" ]
+    verbs: [ "get", "list", "watch" ]
