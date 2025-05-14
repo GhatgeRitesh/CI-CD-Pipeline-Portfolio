@@ -1,0 +1,38 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: validate-k8s-resources
+  namespace: pcas-cd
+spec:
+  params:
+    - name: deployment-name
+      type: string
+    - name: service-name
+      type: string
+    - name: namespace
+      type: string
+
+  steps:
+    - name: validate-service
+      image: bitnami/kubectl:latest
+      script: |
+        #!/bin/sh
+        echo "Validating service: $(params.service-name)"
+        if ! kubectl get svc: $(params.service-name) -n $(params.namespace); then
+          echo "Service not found !!! "
+          exit 1
+        fi
+
+    - name: validate-pods
+      image: bitnami/kubectl:latest
+      script: |
+        #!/bin/sh
+        echo "Checking for pod failures"
+        BAD_PODS=$(kubectl get pods -n $(params.namespace) --field-selector=status.phase!=Running --no-headers | wc -l)
+        if [ "$BAD_PODS" -gt 0 ]; then
+          echo "Some pods are not running"
+          kubectl get pods -n $(params.namespace)
+          exit 1
+        fi
+        
+        echo "All resources looks good."

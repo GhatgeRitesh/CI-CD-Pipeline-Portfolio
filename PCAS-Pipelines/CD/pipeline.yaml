@@ -9,6 +9,8 @@ spec:
   params:
     - name: url
     - name: revision
+    - name: deployment-name
+    - name: namespace
   
   tasks:
     - name: cleanup
@@ -37,3 +39,35 @@ spec:
         - name: source-cd
           workspace: source-cd
       runAfter: ["clone"]
+
+    - name: health-check
+      taskRef:
+        name: rollout-health-check
+      params:
+        - name: deployment-name
+          value: "$(params.deployment-name)"
+        - name: namespace
+          value: "$(params.namespace)"
+      runAfter: ["apply-k8s-manifest"]
+
+    - name: pod-readiness
+      tasksRef:
+        name: pod-readiness
+      params:
+        - name: app-label
+          value: "pcas"
+        - name: namespace
+          value: pcas-cd
+      runAfter: ["health-check"]
+
+    - name: validate-resources
+      tasksRef:
+        name: validate-k8s-resources
+      params:
+        - name: deployment-name
+          value: "$(params.deployment-name)"
+        - name: service-name
+          value: "pcas-service"
+        - name: namespace
+          value: "$(params.namespace)"
+      runAfter: ["pod-readiness"]

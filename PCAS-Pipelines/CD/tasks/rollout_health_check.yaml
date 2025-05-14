@@ -1,0 +1,20 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: rollout-health-check
+  namespace: pcas-cd
+spec:
+  params:
+    - name: deployment-name
+      type: string
+    - name: namespace
+      type: string
+      default: "default"
+  steps:
+    - name: check-rollout
+      image: bitnami/kubectl:latest
+      script: |
+        #!/bin/sh
+        echo "Checking rollout status of deployment: $(params.deployment-name)"
+        kubectl rollout status deployment/$(params.deployment-name) -n $(params.namespace) --timeout=60s
+        echo "Check-rollout task completed !!!"

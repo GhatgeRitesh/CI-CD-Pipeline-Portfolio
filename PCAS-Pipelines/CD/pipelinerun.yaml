@@ -12,6 +12,11 @@ spec:
        value: "https://github.com/GhatgeRitesh/CI-CD-Pipeline-Portfolio.git"
      - name: revision
        value: "main"
+     - name: deployment-name
+       value: "pcas-deployment"
+     - name: namespace
+       value: "pcas-cd"
+
    workspaces:
      - name: source-cd
        persistentVolumeClaim:
