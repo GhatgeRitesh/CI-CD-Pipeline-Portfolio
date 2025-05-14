@@ -3,4 +3,5 @@ kind: ServiceAccount
 metadata:
   name: pcas-sa-cd
   namespace: pcas-cd
-
+secrets:
+  - name: pcas-db-secret

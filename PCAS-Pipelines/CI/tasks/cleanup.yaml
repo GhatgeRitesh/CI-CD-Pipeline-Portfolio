@@ -12,5 +12,9 @@ spec:
       image: alpine
       script: |
         #!/bin/sh
-        rm -rf /workspace/source-ci/*
+        echo "clearing previous repo"
+        rm -rf /workspace/source-ci/src/
+        # echo "clearing .m2 cache dependencies"
+        # rm -rf /workspace/source-ci/.m2
+        echo "cleared workspace"
         

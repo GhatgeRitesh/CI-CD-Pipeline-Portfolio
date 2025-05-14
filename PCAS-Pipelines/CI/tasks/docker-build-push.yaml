@@ -16,13 +16,18 @@ spec:
   steps:
     - name: docker-build-push
       image: docker:24.0.5-cli
-      workingDir: $(workspaces.source-ci.path)/src
+      workingDir: $(workspaces.source-ci.path)/src/
       script: |
        #!/bin/sh
+       echo "Current working Directory $(pwd)"
+       echo "Listing current dir $(ls)"
+       echo -e "listing target directory \n $(./target/)"
+       
+       echo -e "\n -----------------------------------------------------------------\n"
        echo "Building Docker Image : $(params.IMAGE)"
        docker build -t $(params.IMAGE) .
        echo "Pushing Docker Image To DockerHub"
-       docker push $(params.IMAGE) 
+       docker push $(params.IMAGE)
        echo "Image pushed Successfully"
 
       volumeMounts:

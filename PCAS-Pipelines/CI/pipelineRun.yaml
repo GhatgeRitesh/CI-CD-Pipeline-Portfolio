@@ -21,7 +21,7 @@ spec:
     - name: SONAR_HOST_URL
       value: "https://sonarcloud.io"
     - name: IMAGE
-      value: "docker.io/riteshghatge5657/pcas-cicd:0.2"
+      value: "docker.io/riteshghatge5657/pcas-cicd:0.6"
   workspaces:
     - name: source-ci
       PersistentVolumeClaim:

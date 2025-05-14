@@ -1,0 +1,22 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: debug-task
+  namespace: pcas-ci
+spec:
+  workspaces:
+    - name: source-ci
+  steps:
+    - name: docker-workflow 
+      workingDir: $(workspaces.source-ci.path) 
+      image: alpine 
+      script: |
+       #!/bin/sh
+       echo "current Working Directory $(pwd)"
+       echo "ls : \n $(ls)"
+       ls .m2
+       echo "$(ls)"
+       
+       echo "current working Dir $(pwd)"
+       echo "Target directory ls : $(ls ./target/)"
+       

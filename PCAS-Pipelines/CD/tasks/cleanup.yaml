@@ -14,7 +14,7 @@ spec:
         #!/bin/sh
         echo "Current Working Directory : $(pwd)"
         echo "clearing all workspace"
-        rm -rf $(workspaces.source-cd.path)/src
+        rm -rf $(workspaces.source-cd.path)/src/
         echo "current Working Directory : $(pwd)"
         echo "listing All components in Pwd : \n $(ls)"
         echo "Ending Script !"

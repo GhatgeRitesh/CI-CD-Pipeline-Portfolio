@@ -15,7 +15,24 @@ spec:
    spec:
      containers:
       - name: pcas
-        image: riteshghatge5657/pcas-cicd:0.1
+        image: riteshghatge5657/pcas-cicd:0.6
         ports:
          - containerPort: 8090
- 
+        env:
+          - name: DB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: pcas-db-secret
+                key: DB_USERNAME
+          - name: DB_URL
+            valueFrom:
+              secretKeyRef:
+                name: pcas-db-secret
+                key: DB_URL
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: pcas-db-secret
+                key: DB_PASSWORD
+          - name: SPRING_PROFILES_ACTIVE
+            value: "dev"
