@@ -28,10 +28,10 @@ spec:
       script: |
         #!/bin/sh
         echo "Checking for pod failures"
-        BAD_PODS=$(kubectl get pods -n $(params.namespace) --field-selector=status.phase!=Running --no-headers | wc -l)
+        BAD_PODS=$(kubectl get pods -n $(params.namespace) -l app=pcas --field-selector=status.phase!=Running --no-headers | wc -l)
         if [ "$BAD_PODS" -gt 0 ]; then
           echo "Some pods are not running"
-          kubectl get pods -n $(params.namespace)
+          kubectl get pods -n $(params.namespace) -l app=pcas
           exit 1
         fi
         

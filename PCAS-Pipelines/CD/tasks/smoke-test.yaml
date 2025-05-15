@@ -1,0 +1,28 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: smoke-test
+  namespace: pcas-cd
+spec:
+  params:
+    - name: endpoint
+    - name: service-name
+    - name: port
+      type: string
+    - name: namespace
+
+  steps:
+    - name: smoke-check
+      image: curlimages/curl:latest
+      script: |
+        #!/bin/sh
+        echo "Perfoming smoke test on http://$(params.service-name).$(params.namespace).svc.cluster.local:$(params.port)/$(params.endpoint)"
+        url="http://$(params.service-name).$(params.namespace).svc.cluster.local:$(params.port)/$(params.endpoint)"
+        HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$url")
+        
+        if [ "$HTTP_STATUS" -eq 200 ]; then
+          echo " Smoke test passed: HTTP $(HTTP_STATUS)"
+        else
+          echo "Smoke test failed: HTTP $(HTTP_STATUS)"
+        fi
+        

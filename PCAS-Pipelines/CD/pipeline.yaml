@@ -11,7 +11,7 @@ spec:
     - name: revision
     - name: deployment-name
     - name: namespace
-  
+
   tasks:
     - name: cleanup
       taskRef:
@@ -51,7 +51,7 @@ spec:
       runAfter: ["apply-k8s-manifest"]
 
     - name: pod-readiness
-      tasksRef:
+      taskRef:
         name: pod-readiness
       params:
         - name: app-label
@@ -61,7 +61,7 @@ spec:
       runAfter: ["health-check"]
 
     - name: validate-resources
-      tasksRef:
+      taskRef:
         name: validate-k8s-resources
       params:
         - name: deployment-name
@@ -71,3 +71,17 @@ spec:
         - name: namespace
           value: "$(params.namespace)"
       runAfter: ["pod-readiness"]
+
+    - name: smoke-test
+      taskRef:
+        name: smoke-test
+      params:
+        - name: endpoint
+          value: "/pcas/health-check"
+        - name: service-name
+          value: "pcas-service"
+        - name: port
+          value: "8090"
+        - name: namespace
+          value: "$(params.namespace)"
+      runAfter: ["validate-resources"]
